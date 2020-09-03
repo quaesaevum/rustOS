@@ -9,4 +9,7 @@ So, starting a new repo with git and Github - all code run from shell:
 5. `git commit -m "Fix..."`
 6. Create a repo in Github
 6. `git remote add origin https://github.com/[username]/[repo]`
-7. `git pull -r origin master`
+7. `git pull -r origin master` (To rebase to online repo with README, license, etc) - ie the initial pull
+8. `git push origin master` (7 and 8 together get the local and remote properly merged and rebased)
+
+Repeat steps 4, 5, and 8 to make new commits
