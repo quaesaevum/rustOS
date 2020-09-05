@@ -4,10 +4,14 @@ version = "0.1.0"
 authors = ["Josiah A. Roelfsema <jaroelfsema@gmail.com>"]
 edition = "2018"
 
+[dependencies]
+rlibc = "1.0.0"
+bootloader = "0.9.8"
+
 # the profile used for `cargo build`
 [profile.dev]
 panic = "abort" # disable stack unwinding on panic
 
 # the profile used for `cargo build --release`
 [profile.release]
-panic = "abort" # disable stack unwinding on panic 
+panic = "abort" # disable stack unwinding on panic
