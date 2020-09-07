@@ -1,10 +1,10 @@
 # A Freestanding Rust Binary
 Personal notes of Josiah on following Philipp Oppermann's blog "Writing an OS in Rust", located at https://os.phil-opp.com/
 
-03 Sept 2020:
+###03 Sept 2020:
 - Completed *A Freestanding Rust Binary*. Got everything working so far.
 
-05 Sept 2020:
+###05 Sept 2020:
 - Started *A Minimal Rust Kernel*
 - Completed it as well
 Thoughts:  
@@ -14,12 +14,12 @@ Thoughts:
 - Could this run on a Pi? On an Arduino?
 - How could this work on IoT devices?
 
-07 Sept 2020:
+###07 Sept 2020:
 Start *VGA Text Mode*:
 - VGA text buffer standard is 25 rows and 80 columns - just so, Terminal default is 80x24.
 - Hmm, what do you know, it works so far.
   - Got the VGA buffer up and running in basic form.
-### Semantic Versioning
+####Semantic Versioning
 https://semver.org
 "Given a version number MAJOR.MINOR.PATCH, increment the:
 1. MAJOR version when you make incompatible API changes,
