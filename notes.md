@@ -26,10 +26,9 @@ https://semver.org
 2. MINOR version when you add functionality in a backwards compatible manner,
 3. PATCH version when you make backwards compatible bug fixes.
 Additional labels for pre-release and build metadata are available as
-extensions to the MAJOR.MINOR.PATCH format."
+extensions to the MAJOR.MINOR.PATCH format."  
 
-- Ok, what did we learn so far?
-  - We accessed the VGA buffer to write to std output. This was done by direct memory access to the VGA buffer using "unsafe" Rust. For now, we compile and run via QEMU emulator to keep this off our own computer, but it should work on a bare metal system with BIOS, bootloader, and VGA buffer.
-  - VGA buffer has some ASCII characters, 16 colors for foreground, 8 colors for background, and blink option
-  - VGA prints unknown UTF-8 as two nonsense characters due to UTF-8 being 32-bit instead of 16.
-  
+Ok, what did we learn so far?
+- We accessed the VGA buffer to write to std output. This was done by direct memory access to the VGA buffer using "unsafe" Rust. For now, we compile and run via QEMU emulator to keep this off our own computer, but it should work on a bare metal system with BIOS, bootloader, and VGA buffer.
+- VGA buffer has some ASCII characters, 16 colors for foreground, 8 colors for background, and blink option
+- VGA prints unknown UTF-8 as two nonsense characters due to UTF-8 being 32-bit instead of 16.
