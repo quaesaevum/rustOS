@@ -32,3 +32,16 @@ Ok, what did we learn so far?
 - We accessed the VGA buffer to write to std output. This was done by direct memory access to the VGA buffer using "unsafe" Rust. For now, we compile and run via QEMU emulator to keep this off our own computer, but it should work on a bare metal system with BIOS, bootloader, and VGA buffer.
 - VGA buffer has some ASCII characters, 16 colors for foreground, 8 colors for background, and blink option
 - VGA prints unknown UTF-8 as two nonsense characters due to UTF-8 being 32-bit instead of 16.
+
+### 08 Sept 2020:
+Continuing *VGA Text Mode*:  
+Finished.  
+What did we learn?  
+- Stuff about writing macros
+
+#### Started *Testing*
+https://wiki.osdev.org
+Built a basic trivial test without std:
+- Had to set up our own system of testing that mimics normal std testing
+- Built a unique set of exit codes to avoid confusion with QEMU's exit codes
+Completed up to *Printing to the Console* subheading  
