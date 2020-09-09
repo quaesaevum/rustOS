@@ -32,3 +32,7 @@ features = ["spin_no_std"]
 # the profile used for `cargo build --release`
 [profile.release]
 panic = "abort" # disable stack unwinding on panic
+
+[[test]]
+name = "should_panic"
+harness = false
