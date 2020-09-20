@@ -50,3 +50,17 @@ Completed up to *Printing to the Console* subheading
 ### 09 Sept 2020:
 Continuing *Testing* from subheading *Printing to the Console*:
 - lazy_static provides a macro that defines a static when it is used the first time rather than at compile time as is normal for statics. This allows arbitrarily complex initialization code as well.  
+
+### 18 Sept 2020:
+Had some time in course work, so I was away from this project for a bit.
+- Finished *CPU exceptions*.
+  - Good first read of lots of topics, but much more here that I don't know.
+  - May return fruitfully in another couple of months of related study so that I understand more.
+
+### 19 Sept 2020:
+Back at it again.
+Start *Double Fault Exceptions*.
+- Occurs when CPU fails to invoke an exception handler.
+  - very important! If fail at double fault, a triple fault is FATAL!
+    - Most hardware reacts with system reset at triple fault.
+- added a double fault handler. this sets initial ability to catch all rest of faults, since any double fault is now caught

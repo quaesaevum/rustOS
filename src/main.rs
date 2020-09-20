@@ -45,13 +45,24 @@ use rust_os::println;
 //     }
 // }
 
-#[no_mangle]    // don't mangle the name of this function
+#[no_mangle]    // don't mangle the name of this function. it must be _start because that is the
+                // default entry point for most systems. it must not be mangled
 pub extern "C" fn _start() -> ! {
     println!("Hello World{}", "!");
+
+    rust_os::init();
+
+fn stack_overflow() {
+    stack_overflow();
+}
+
+    // trigger a stack overflow
+    stack_overflow();
 
     #[cfg(test)]
     test_main();    // invoke tests
 
+    println!("It did not crash!");
     loop {}
 }
 

@@ -1,10 +1,11 @@
 // /Users/josiah/github/rustOS/src/lib.rs
 
-#![no_std]
+#![no_std]                      // we keep std out so that we do not need it
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
+#![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
 
@@ -12,6 +13,8 @@ extern crate rlibc;
 
 pub mod serial;
 pub mod vga_buffer;
+pub mod interrupts;
+pub mod gdt;
 
 pub trait Testable {
     fn run(&self) -> ();
@@ -20,16 +23,20 @@ pub trait Testable {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
 pub enum QemuExitCode {
-    Success = 0x10,
-    Failed = 0x11,
+    Success = 0x10,         // 16
+    Failed = 0x11,          // 17
 }
 
-pub fn exit_qemu(exit_code: QemuExitCode) {
-    use x86_64::instructions::port::Port;
+pub fn exit_qemu(exit_code: QemuExitCode) {     // define a public function named exit_qemu that
+                                                // params exit_code that is a QemuExitCode, a
+                                                // public enum
+    use x86_64::instructions::port::Port;       // from x86_64 namespace, etc, use Port
 
-    unsafe {
-        let mut port = Port::new(0xf4);
-        port.write(exit_code as u32);
+    unsafe {                                    // define an unsafe block of code
+        let mut port = Port::new(0xf4);         // define a mutable variable name port that is-a
+                                                // new Port on 0xf4 = 244
+        port.write(exit_code as u32);           // to that port, write exit_code having converted
+                                                // it to an unsigned 32-bit integer
     }
 }
 
@@ -59,10 +66,16 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     loop {}
 }
 
+pub fn init() {
+    gdt::init();
+    interrupts::init_idt();
+}
+
 /// Entry point for `cargo test`
 #[cfg(test)]
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    init();
     test_main();
     loop {}
 }
