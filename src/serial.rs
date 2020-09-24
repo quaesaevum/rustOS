@@ -16,7 +16,14 @@ lazy_static! {  // "use lazy_static and a spinlock to create a static writer ins
 #[doc(hidden)]  // prevent this from entering docs
 pub fn _print(args: ::core::fmt::Arguments) {   // core print function
     use core::fmt::Write;
-    SERIAL1.lock().write_fmt(args).expect("Printing to serial failed");
+    use x86_64::instructions::interrupts;
+
+    interrupts::without_interrupts(|| {
+        SERIAL1
+            .lock()
+            .write_fmt(args)
+            .expect("Printing to serial failed");
+    });
 }
 
 /// Prints to the host through the serial interface

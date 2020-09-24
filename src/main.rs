@@ -45,6 +45,8 @@ use rust_os::println;
 //     }
 // }
 
+use rust_os::print;
+
 #[no_mangle]    // don't mangle the name of this function. it must be _start because that is the
                 // default entry point for most systems. it must not be mangled
 pub extern "C" fn _start() -> ! {
@@ -52,18 +54,11 @@ pub extern "C" fn _start() -> ! {
 
     rust_os::init();
 
-fn stack_overflow() {
-    stack_overflow();
-}
-
-    // trigger a stack overflow
-    stack_overflow();
-
     #[cfg(test)]
     test_main();    // invoke tests
 
     println!("It did not crash!");
-    loop {}
+    rust_os::hlt_loop();
 }
 
 /// panic handler in non-testing mode
@@ -71,7 +66,7 @@ fn stack_overflow() {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    rust_os::hlt_loop();
 }
 
 // panic handler in test mode

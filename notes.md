@@ -64,3 +64,7 @@ Start *Double Fault Exceptions*.
   - very important! If fail at double fault, a triple fault is FATAL!
     - Most hardware reacts with system reset at triple fault.
 - added a double fault handler. this sets initial ability to catch all rest of faults, since any double fault is now caught
+
+### 23 Sept 2020:
+- Today's music: "Nun komm der Heiden Heiland", Bach, BWV 659
+Working on *Hardware Interrupts*.
