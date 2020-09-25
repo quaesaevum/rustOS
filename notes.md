@@ -66,5 +66,15 @@ Start *Double Fault Exceptions*.
 - added a double fault handler. this sets initial ability to catch all rest of faults, since any double fault is now caught
 
 ### 23 Sept 2020:
-- Today's music: "Nun komm der Heiden Heiland", Bach, BWV 659
+- Today's music: "Nun komm der Heiden Heiland", Bach, BWV 659. Lovely.
 Working on *Hardware Interrupts*.
+
+### 25 Sept 2020:
+#### Thoughts and summary so far.
+
+Well, you've made it this far. What have you learned?  
+Keyboards and interrupts. Interrupts are input from hardware and software that inject input into the kernel and/or firmware/hardware depending on setup. Interrupts allow for user input as well as providing a path for communication among all parts of the computer/user system. For example, keyboard interrupts allow data input from the keyboard to be read by the programmable interrupt controllers (usually a primary and secondary) (PICs) which send data to the CPU for processing. The handling of these interrupts via the code base of the kernel provides interactability between a user's keyboard input and the computer. Other interrupts include internal timers (can set to run code at certain times), voice input, touch input, sound input, sensors, network input, feedback from hardware, software interrupts, etc. We also improved the CPU usage by allowing it to stand idle waiting for input rather than just looping indefinitely. 
+
+Prior to that, we handled faults. Several basic fault handlers were defined and implemented. The most important initially was the handler for double faults which is needed to avoid the fatal triple fault. Explanations of when/where/why faults occur and when it is possible to have double faults were helpful. When handling a fault, it is important to keep other faults from occurring if possible, and/or allowing for their handling at the time. Further, interrupts and their relation to faults must be taken care of thoughtfully so that neither interferes with the other. The spinlock to lock the CPU came in handy in several places during this implementation.  
+
+It was helpful to learn how each part works and how it interacts with the others. For example, the fault handler setup and the PIC setup gave insight into construction of hardware/software interface and how each provides necessary and important functions.
