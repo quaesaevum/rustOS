@@ -10,54 +10,39 @@
 
 use core::panic::PanicInfo;
 use rust_os::println;
-
-// mod vga_buffer; // define a module for vga buffer - located in src/vga_buffer.rs
-// mod serial;
-
-// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-// #[repr(u32)]
-// pub enum QemuExitCode {
-//     Success = 0x10,
-//     Failed = 0x11,
-// }
-//
-// pub trait Testable {
-//     fn run(&self) -> ();
-// }
-//
-// impl<T> Testable for T
-// where
-//     T: Fn(),
-// {
-//     fn run(&self) {
-//         serial_print!("{}...\t", core::any::type_name::<T>());
-//         self();
-//         serial_println!("[ok]");
-//     }
-// }
-
-// pub fn exit_qemu(exit_code: QemuExitCode) {
-//     use x86_64::instructions::port::Port;
-//
-//     unsafe {
-//         let mut port = Port::new(0xf4);
-//         port.write(exit_code as u32);
-//     }
-// }
-
 use rust_os::print;
+use bootloader::{BootInfo, entry_point};
 
-#[no_mangle]    // don't mangle the name of this function. it must be _start because that is the
+entry_point!(kernel_main);
+
+// #[no_mangle]    // don't mangle the name of this function. it must be _start because that is the
                 // default entry point for most systems. it must not be mangled
-pub extern "C" fn _start() -> ! {
-    println!("Hello World{}", "!");
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    use rust_os::memory::active_level_4_table;
+    use rust_os::memory::translate_addr;
+    use x86_64::VirtAddr;
 
+    println!("Hello World{}", "!");
     rust_os::init();
 
-    use x86_64::registers::control::Cr3;
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
 
-    let (level_4_page_table, _) = Cr3::read();
-    println!("Level 4 page table at: {:?}", level_4_page_table.start_address());
+    let addresses = [
+     // the identity-mapped vga buffer page
+     0xb8000,
+     // some code page
+     0x201008,
+     // some stack page
+     0x0100_0020_1a10,
+     // virtual address mapped to physical address 0
+     boot_info.physical_memory_offset,
+    ];
+
+    for &address in &addresses {
+     let virt = VirtAddr::new(address);
+     let phys = unsafe { translate_addr(virt, phys_mem_offset) };
+     println!("{:?} -> {:?}", virt, phys);
+    }
 
     #[cfg(test)]
     test_main();    // invoke tests
