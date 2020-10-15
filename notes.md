@@ -73,8 +73,20 @@ Working on *Hardware Interrupts*.
 #### Thoughts and summary so far.
 
 Well, you've made it this far. What have you learned?  
-Keyboards and interrupts. Interrupts are input from hardware and software that inject input into the kernel and/or firmware/hardware depending on setup. Interrupts allow for user input as well as providing a path for communication among all parts of the computer/user system. For example, keyboard interrupts allow data input from the keyboard to be read by the programmable interrupt controllers (usually a primary and secondary) (PICs) which send data to the CPU for processing. The handling of these interrupts via the code base of the kernel provides interactability between a user's keyboard input and the computer. Other interrupts include internal timers (can set to run code at certain times), voice input, touch input, sound input, sensors, network input, feedback from hardware, software interrupts, etc. We also improved the CPU usage by allowing it to stand idle waiting for input rather than just looping indefinitely. 
+Keyboards and interrupts. Interrupts are input from hardware and software that inject input into the kernel and/or firmware/hardware depending on setup. Interrupts allow for user input as well as providing a path for communication among all parts of the computer/user system. For example, keyboard interrupts allow data input from the keyboard to be read by the programmable interrupt controllers (usually a primary and secondary) (PICs) which send data to the CPU for processing. The handling of these interrupts via the code base of the kernel provides interactability between a user's keyboard input and the computer. Other interrupts include internal timers (can set to run code at certain times), voice input, touch input, sound input, sensors, network input, feedback from hardware, software interrupts, etc. We also improved the CPU usage by allowing it to stand idle waiting for input rather than just looping indefinitely.
 
 Prior to that, we handled faults. Several basic fault handlers were defined and implemented. The most important initially was the handler for double faults which is needed to avoid the fatal triple fault. Explanations of when/where/why faults occur and when it is possible to have double faults were helpful. When handling a fault, it is important to keep other faults from occurring if possible, and/or allowing for their handling at the time. Further, interrupts and their relation to faults must be taken care of thoughtfully so that neither interferes with the other. The spinlock to lock the CPU came in handy in several places during this implementation.  
 
 It was helpful to learn how each part works and how it interacts with the others. For example, the fault handler setup and the PIC setup gave insight into construction of hardware/software interface and how each provides necessary and important functions.
+
+### 15 Oct 2020:
+- I've actually worked a bit on this between 25 Sept and now but made no notes.
+- Static lifetimes for variables give them a place in a separate memory range from the stack. As such, they live until the end. Downside is they are read-only by default. They may be modified by using a Mutex type to encapsulate the static variable. This Mutex ensures only one &mut reference lives at any single point in time. Otherwise, if two threads tried to modify a single static at the same time, you'd have a race condition.
+- Does this mean the 'static lifetime makes the variable live outside the borrow checker restrictions?
+
+#### The Heap
+And so we get to the heap. The stack holds all local variables defined within each inner function as well as any other data like return values for functions that is indexed in order. The 'static variables live in read-only memory (with the exceptions as defined by Mutex - maybe others as well?). The idea for the heap is dynamic memory allocation, so that, eg, variables that change size may be used.
+- Motivation: We're going to add a heap to our OS so that we have dynamic memory available.
+- We want it for two reasons:
+  - Allows dynamically-sized variables, eg strings and vecs
+  - Allows dynamic lifetimes
