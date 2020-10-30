@@ -12,6 +12,7 @@ extern crate alloc;
 use core::panic::PanicInfo;
 use rust_os::println;
 use rust_os::print;
+use rust_os::task::{Task, simple_executor::SimpleExecutor};
 use bootloader::{BootInfo, entry_point};
 use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
 
@@ -55,6 +56,10 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     core::mem::drop(reference_counted);
     println!("reference count is {} now", Rc::strong_count(&cloned_reference));
 
+    let mut executor = SimpleExecutor::new();
+    executor.spawn(Task::new(example_task()));
+    executor.run();
+    
     #[cfg(test)]
     test_main();    // invoke tests
 
