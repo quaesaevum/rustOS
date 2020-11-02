@@ -16,6 +16,7 @@ use rust_os::task::{Task, simple_executor::SimpleExecutor};
 use bootloader::{BootInfo, entry_point};
 use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
 use rust_os::task::keyboard;
+use rust_os::task::executor::Executor;
 
 entry_point!(kernel_main);
 
@@ -64,13 +65,13 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     #[cfg(test)]
     test_main();    // invoke tests
 
-    let mut executor = SimpleExecutor::new();
+    let mut executor = Executor::new();
     executor.spawn(Task::new(example_task()));
     executor.spawn(Task::new(keyboard::print_keypresses()));
     executor.run();
 
     println!("It did not crash!");
-    rust_os::hlt_loop();
+//    rust_os::hlt_loop();
 }
 
 async fn async_number() -> u32 {
